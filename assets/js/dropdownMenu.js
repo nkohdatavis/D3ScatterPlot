@@ -1,11 +1,17 @@
 export const dropdownMenu = (selection, props) => {
     const {
-        options
+        options,
+        onOptionClicked
     } = props;
 
     //Select will have one element all the time
     let select = selection.selectAll('select').data([null]);
-    select = select.enter().append('select').merge(select);
+    select = select.enter().append('select')
+        .merge(select)
+        .on('change', function () {
+            onOptionClicked(this.value);
+            // console.log(this.value);
+        });
 
     //data join
     const option = select.selectAll('option').data(options);
