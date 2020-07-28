@@ -9,6 +9,7 @@
 // } from 'd3'; 
 
 import { dropdownMenu } from './dropdownMenu.js';
+import { scatterPlot } from './scatterPlot.js';
 
 const svg = d3.select('svg');
 
@@ -24,99 +25,57 @@ const height = +svg.attr('height');
 // d.year = +d.year;
 
 //accessor functions
-const render = data => {
+//store data as state
+let data;
+let xColumn;
+let yColumn;
 
-  d3.select('#menus')
+const onXColumnClicked = column => {
+  xColumn = column;
+  render();
+};
+
+const onYColumnClicked = column => {
+  yColumn = column;
+  render();
+};
+
+const render = () => {
+
+  d3.select('#x-menu')
     .call(dropdownMenu, {
       options: data.columns,
-      onOptionClicked: column => {
-        console.log(column); //List of columns to be used for drop down menu
-      }
+      onOptionClicked: onXColumnClicked
+      // column => {
+      //   console.log(column); //List of columns to be used for drop down menu
+      // }
     });
 
-  const title = 'Cars: Horsepower vs.Weight';
+  d3.select('#y-menu')
+    .call(dropdownMenu, {
+      options: data.columns,
+      onOptionClicked: onYColumnClicked
+    });
 
-  const xValue = d => d.horsepower;
-  const xAxisLabel = 'Horsepower';
+  svg.call(scatterPlot, {
+    xValue: d => d[xColumn],
+    xAxisLabel: xColumn,
+    yValue: d => d[yColumn],
+    circleRadius: 10,
+    yAxisLabel: yColumn,
+    margin: { top: 60, right: 40, bottom: 88, left: 150 },
+    width,
+    height,
+    data
+  });
 
-
-  const yValue = d => d.weight;
-  const yAxisLabel = 'Weight';
-  const circleRadius = 10;
-
-  const margin = { top: 60, right: 40, bottom: 88, left: 150 };
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
-
-  const xScale = d3.scaleLinear()
-    .domain(d3.extent(data, xValue))
-    .range([0, innerWidth])
-    .nice();
-
-  // console.log(xScale.domain());
-  // console.log(xScale.range());
-
-  const yScale = d3.scaleLinear()
-    .domain(d3.extent(data, yValue))
-    .range([0, innerHeight])
-    .nice();
-
-  // console.log(yScale.domain());
-  // console.log(yScale.range());
-
-  const g = svg.append('g')
-    .attr('transform', `translate(${margin.left},${margin.top})`);
-
-  const xAxis = d3.axisBottom(xScale)
-    .tickSize(-innerHeight)
-    .tickPadding(15);
-
-  const yAxis = d3.axisLeft(yScale)
-    .tickSize(-innerWidth)
-    .tickPadding(10);
-
-  const yAxisG = g.append('g').call(yAxis);
-
-  yAxisG.selectAll('.domain').remove();
-
-  yAxisG.append('text')
-    .attr('class', 'axis-label')
-    .attr('y', -93)
-    .attr('x', -innerHeight / 2)
-    .attr('fill', 'black')
-    .attr('transform', `rotate(-90)`)
-    .attr('text-anchor', 'middle')
-    .text(yAxisLabel);
-
-  const xAxisG = g.append('g').call(xAxis)
-    .attr('transform', `translate(0,${innerHeight})`);
-
-  xAxisG.select('.domain').remove();
-
-  xAxisG.append('text')
-    .attr('class', 'axis-label')
-    .attr('y', 75)
-    .attr('x', innerWidth / 2)
-    .attr('fill', 'black')
-    .text(xAxisLabel);
-
-  //bandwidth compute width of a single bar
-  g.selectAll('circle').data(data)
-    .enter().append('circle')
-    .attr('cy', d => yScale(yValue(d)))
-    .attr('cx', d => xScale(xValue(d)))
-    .attr('r', circleRadius);
-
-  g.append('text')
-    .attr('class', 'title')
-    .attr('y', -10)
-    .text(title);
-
+  // const title = 'Cars: Horsepower vs.Weight';
 };
 
 //Data Table
 d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
-  .then(data => {
+  .then(loadedData => {
+    data = loadedData;
     data.forEach(d => {
       d.mpg = +d.mpg;
       d.cylinders = +d.cylinders;
@@ -126,6 +85,8 @@ d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
       d.acceleration = +d.acceleration;
       d.year = +d.year;
     });
+    xColumn = data.columns[0];
+    yColumn = data.columns[0];
     render(data);
   });
 
