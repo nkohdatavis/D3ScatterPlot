@@ -1,7 +1,8 @@
 export const dropdownMenu = (selection, props) => {
     const {
         options,
-        onOptionClicked
+        onOptionClicked,
+        selectedOption
     } = props;
 
     //Select will have one element all the time
@@ -18,6 +19,7 @@ export const dropdownMenu = (selection, props) => {
     option.enter().append('option')
         .merge(option)
         .attr('value', d => d)
+        .property('selected', d => d === selectedOption)
         .text(d => d);
 
 };

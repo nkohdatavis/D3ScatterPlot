@@ -45,7 +45,8 @@ const render = () => {
   d3.select('#x-menu')
     .call(dropdownMenu, {
       options: data.columns,
-      onOptionClicked: onXColumnClicked
+      onOptionClicked: onXColumnClicked,
+      selectedOption: xColumn
       // column => {
       //   console.log(column); //List of columns to be used for drop down menu
       // }
@@ -54,7 +55,8 @@ const render = () => {
   d3.select('#y-menu')
     .call(dropdownMenu, {
       options: data.columns,
-      onOptionClicked: onYColumnClicked
+      onOptionClicked: onYColumnClicked,
+      selectedOption: yColumn
     });
 
   svg.call(scatterPlot, {
@@ -63,7 +65,7 @@ const render = () => {
     yValue: d => d[yColumn],
     circleRadius: 10,
     yAxisLabel: yColumn,
-    margin: { top: 60, right: 40, bottom: 88, left: 150 },
+    margin: { top: 10, right: 40, bottom: 88, left: 150 },
     width,
     height,
     data
@@ -85,7 +87,7 @@ d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
       d.acceleration = +d.acceleration;
       d.year = +d.year;
     });
-    xColumn = data.columns[0];
+    xColumn = data.columns[4];
     yColumn = data.columns[0];
     render(data);
   });

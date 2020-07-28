@@ -121,6 +121,8 @@ export const scatterPlot = (selection, props) => {
         .selectAll('circle').data(data);
     circles.enter().append('circle')
         .merge(circles)
+        .transition().duration(2000)
+        .delay((d, i) => i * 10)
         .attr('cy', d => yScale(yValue(d)))
         .attr('cx', d => xScale(xValue(d)))
         .attr('r', circleRadius);
