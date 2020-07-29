@@ -120,6 +120,9 @@ export const scatterPlot = (selection, props) => {
     const circles = g.merge(gEnter)
         .selectAll('circle').data(data);
     circles.enter().append('circle')
+        .attr('cx', innerWidth / 2)
+        .attr('cy', innerHeight / 2)
+        .attr('r', '0')
         .merge(circles)
         .transition().duration(2000)
         .delay((d, i) => i * 10)
