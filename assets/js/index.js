@@ -8,12 +8,10 @@
 //   format
 // } from 'd3'; 
 
-// import { dropdownMenu } from '/assets/js/dropdownMenu.js';
-// import { scatterPlot } from '/assets/js/scatterPlot.js';
+import { dropdownMenu } from '/assets/js/dropdownMenu.js';
+import { scatterPlot } from '/assets/js/scatterPlot.js';
 
 
-import  '/assets/js/dropdownMenu.js';
-import  '/assets/js/scatterPlot.js';
 
 const svg = d3.select('svg');
 
