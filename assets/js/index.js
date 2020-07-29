@@ -8,8 +8,8 @@
 //   format
 // } from 'd3'; 
 
-import { dropdownMenu } from '/assets/js/dropdownMenu.js';
-import { scatterPlot } from '/assets/js/scatterPlot.js';
+import { dropdownMenu } from 'https://github.com/nkohdatavis/D3ScatterPlot/blob/master/assets/js/dropdownMenu.js';
+import { scatterPlot } from 'https://github.com/nkohdatavis/D3ScatterPlot/blob/master/assets/js/scatterPlot.js';
 
 
 
